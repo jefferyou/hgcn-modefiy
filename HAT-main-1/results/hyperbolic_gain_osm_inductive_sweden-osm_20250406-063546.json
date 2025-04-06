@@ -1,0 +1,18 @@
+{
+    "dataset": "osm_inductive",
+    "prefix": "sweden-osm",
+    "lr": 0.002,
+    "l2": 0.0001,
+    "units": 256,
+    "heads": 16,
+    "dropout": 0.1,
+    "model_size": "big",
+    "curvature": 1.0,
+    "best_epoch": 149,
+    "test_loss": 1.098931908607483,
+    "test_acc": 0.5822456479072571,
+    "test_macro_f1": 0.43437052408821736,
+    "test_micro_f1": 0.5822454308093995,
+    "val_loss": 0.8883060812950134,
+    "val_acc": 0.6571860313415527
+}

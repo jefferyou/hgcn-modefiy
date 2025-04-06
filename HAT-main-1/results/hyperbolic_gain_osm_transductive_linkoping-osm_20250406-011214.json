@@ -1,0 +1,18 @@
+{
+    "dataset": "osm_transductive",
+    "prefix": "linkoping-osm",
+    "lr": 0.002,
+    "l2": 0.0001,
+    "units": 256,
+    "heads": 8,
+    "dropout": 0.2,
+    "model_size": "big",
+    "curvature": 1.0,
+    "best_epoch": 297,
+    "test_loss": 0.6641184091567993,
+    "test_acc": 0.7500010132789612,
+    "test_macro_f1": 0.7215758100083234,
+    "test_micro_f1": 0.75,
+    "val_loss": 0.7029571533203125,
+    "val_acc": 0.7340003848075867
+}
