@@ -17,17 +17,17 @@ def parse_args():
     parser.add_argument('-gpu', nargs='?', default='0', help='the ID for GPU')
     parser.add_argument('-dataset', nargs='?', default='osm_inductive', help='osm_transductive or osm_inductive osm_drsd')
     parser.add_argument('-prefix', nargs='?', default='italy-osm', help='linkoping-osm or sweden-osm drsd-osm  venice-osm   italy-osm')
-    parser.add_argument('-lr', default=0.003, type=float, help='learning rate')
-    parser.add_argument('-l2', default=5.5450060109037986e-05, type=float, help='l2 regularization')
-    parser.add_argument('-units', default=256, type=int, help='dimension for hidden unit')
+    parser.add_argument('-lr', default=0.0035033984911586884, type=float, help='learning rate')
+    parser.add_argument('-l2', default=2.497073714505272e-05, type=float, help='l2 regularization')
+    parser.add_argument('-units', default=128, type=int, help='dimension for hidden unit')
     parser.add_argument('-heads', default=4, type=int, help='number of multi-heads')
-    parser.add_argument('-dropout', default=0.12, type=float, help='dropout rate')
-    parser.add_argument('-epochs', default=2000, type=int, help='maximum number of epochs')
+    parser.add_argument('-dropout', default=0.12317381190502595, type=float, help='dropout rate')
+    parser.add_argument('-epochs', default=600, type=int, help='maximum number of epochs')
     parser.add_argument('-patience', default=200, type=int, help='patience for early stopping')
     parser.add_argument('-c', default=1, type=int, help='0: untrainable curvature; 1: trainable curvature')
     parser.add_argument('-data_dir', default='graph_data', help='directory containing the datasets')
     parser.add_argument('-model_size', default='small', help='model size: small or big')
-    parser.add_argument('-use_global_walks', type=int, default=0, help='Use global neighborhood walks: 0=off, 1=on')
+    parser.add_argument('-use_global_walks', type=int, default=1, help='Use global neighborhood walks: 0=off, 1=on')
     parser.add_argument('-fusion_type', type=str, default='simple',
                         choices=['simple', 'adaptive', 'attention'],
                         help='Method to fuse local and global walks')
@@ -36,17 +36,17 @@ def parse_args():
 
 def load_osm_data(args):
     """
-    Load OSM data from GAIN's dataset format
+    Load OSM data_process from GAIN's dataset format
     """
     print(f"Loading {args.dataset} with prefix {args.prefix}")
 
     from sklearn.preprocessing import StandardScaler
 
-    # Set data paths
+    # Set data_process paths
     data_dir = os.path.join(args.data_dir, args.dataset)
     prefix = args.prefix
 
-    print(f"Loading data from: {data_dir}")
+    print(f"Loading data_process from: {data_dir}")
 
     try:
         # Load graph from JSON
@@ -155,7 +155,7 @@ def load_osm_data(args):
         return adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask
 
     except Exception as e:
-        print(f"Error loading data: {str(e)}")
+        print(f"Error loading data_process: {str(e)}")
         raise
 
 
@@ -165,7 +165,7 @@ def main(args):
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
 
-    # Load data
+    # Load data_process
     print("Loading dataset...")
     adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask = load_osm_data(args)
 
@@ -183,6 +183,15 @@ def main(args):
     c = args.c
     model_size = args.model_size
 
+    # Add definition for results_dir here
+    results_dir = 'results'
+    os.makedirs(results_dir, exist_ok=True)
+
+    import time
+    timestamp = time.strftime("%Y%m%d-%H%M%S")
+
+
+
     # Print configuration
     print('=' * 50)
     print('Hyperbolic GAIN Configuration:')
@@ -198,7 +207,7 @@ def main(args):
     print(f'Model size: {model_size}')
     print('=' * 50)
 
-    # Prepare data for training
+    # Prepare data_process for training
     sparse = True  # Use sparse tensor operations
 
     nb_nodes = features.shape[0]
@@ -368,13 +377,15 @@ def main(args):
                     ts_acc = 0.0
                     ts_macro = 0.0
                     ts_micro = 0.0
-                    
+                    ts_weighted = 0.0  # Add variable for weighted F1
+                    ts_accuracy = 0.0  # Add variable for standard accuracy
+
                     while ts_step * batch_size < ts_size:
                         if sparse:
                             bbias = biases
                         else:
                             bbias = biases[ts_step * batch_size:(ts_step + 1) * batch_size]
-                            
+
                         loss_value_ts, acc_ts, test_emb, real_y, pred_y = sess.run(
                             [loss, accuracy, emb, real_all, pred_all],
                             feed_dict={
@@ -389,49 +400,53 @@ def main(args):
                         ts_loss += loss_value_ts
                         ts_acc += acc_ts
                         ts_step += 1
-                        
+
                         # Calculate F1 scores
-                        ts_macro += f1_score(real_y[test_mask[0]], pred_y[test_mask[0]], average='macro')
-                        ts_micro += f1_score(real_y[test_mask[0]], pred_y[test_mask[0]], average='micro')
-                else:
-                    curr_step += 1
-                    if curr_step == patience:
-                        print('Early stopping! Min loss: {:.5f}, Max accuracy: {:.5f}'.format(vlss_mn, vacc_mx))
-                        print('Early stop model validation loss: {:.5f}, accuracy: {:.5f}'.format(
-                            vlss_early_model, vacc_early_model))
-                        print(f'Best epoch: {best_epoch}')
-                        break
-            
-            # Final test results
-            print('\nTraining completed!')
-            print('Test results:')
-            print('Loss: {:.5f}, Accuracy: {:.5f}'.format(ts_loss/ts_step, ts_acc/ts_step))
-            print('Macro F1: {:.5f}, Micro F1: {:.5f}'.format(ts_macro/ts_step, ts_micro/ts_step))
-            print('Final curvature value: {:.5f}'.format(curvature_this[0]))
-            
-            # Save results
-            timestamp = time.strftime("%Y%m%d-%H%M%S")
-            results_dir = 'results'
-            os.makedirs(results_dir, exist_ok=True)
-            
-            results = {
-                'dataset': args.dataset,
-                'prefix': args.prefix,
-                'lr': args.lr,
-                'l2': args.l2,
-                'units': args.units,
-                'heads': args.heads,
-                'dropout': args.dropout,
-                'model_size': args.model_size,
-                'curvature': float(curvature_this[0]),
-                'best_epoch': best_epoch,
-                'test_loss': float(ts_loss/ts_step),
-                'test_acc': float(ts_acc/ts_step),
-                'test_macro_f1': float(ts_macro/ts_step),
-                'test_micro_f1': float(ts_micro/ts_step),
-                'val_loss': float(vlss_mn),
-                'val_acc': float(vacc_mx)
-            }
+                        # Get only the nodes in the test mask
+                        mask = test_mask[0]
+                        y_true = real_y[mask]
+                        y_pred = pred_y[mask]
+
+                        # Calculate existing metrics: macro and micro F1
+                        ts_macro += f1_score(y_true, y_pred, average='macro')
+                        ts_micro += f1_score(y_true, y_pred, average='micro')
+
+                        # Add weighted F1 score
+                        ts_weighted += f1_score(y_true, y_pred, average='weighted')
+
+                        # Add standard accuracy score
+                        ts_accuracy += np.mean(y_true == y_pred)  # Simple accuracy calculation
+
+                    # Print final test results
+                    print('\nTraining completed!')
+                    print('Test results:')
+                    print('Loss: {:.5f}, Accuracy: {:.5f}'.format(ts_loss / ts_step, ts_acc / ts_step))
+                    print('Macro F1: {:.5f}, Micro F1: {:.5f}'.format(ts_macro / ts_step, ts_micro / ts_step))
+                    print('Weighted F1: {:.5f}, Standard Accuracy: {:.5f}'.format(ts_weighted / ts_step,
+                                                                                  ts_accuracy / ts_step))
+                    print('Final curvature value: {:.5f}'.format(curvature_this[0]))
+
+                    # Save results to JSON
+                    results = {
+                        'dataset': args.dataset,
+                        'prefix': args.prefix,
+                        'lr': args.lr,
+                        'l2': args.l2,
+                        'units': args.units,
+                        'heads': args.heads,
+                        'dropout': args.dropout,
+                        'model_size': args.model_size,
+                        'curvature': float(curvature_this[0]),
+                        'best_epoch': best_epoch,
+                        'test_loss': float(ts_loss / ts_step),
+                        'test_acc': float(ts_acc / ts_step),
+                        'test_macro_f1': float(ts_macro / ts_step),
+                        'test_micro_f1': float(ts_micro / ts_step),
+                        'test_weighted_f1': float(ts_weighted / ts_step),  # Add weighted F1 to results
+                        'test_accuracy': float(ts_accuracy / ts_step),  # Add standard accuracy to results
+                        'val_loss': float(vlss_mn),
+                        'val_acc': float(vacc_mx)
+                    }
             
             # Save to JSON file
             results_file = os.path.join(

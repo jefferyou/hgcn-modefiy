@@ -12,7 +12,7 @@ class SpHyperbolicGAIN(BaseHGAttN):
     - HAT: Hyperbolic Graph Attention Network
     - GAIN: Graph Attention Isomorphism Network
 
-    It leverages hyperbolic geometry for better representation of hierarchical data
+    It leverages hyperbolic geometry for better representation of hierarchical data_process
     while using the improved attention mechanism from GAIN for better feature aggregation.
     It also incorporates both local and global node sampling strategies from GAIN.
     """

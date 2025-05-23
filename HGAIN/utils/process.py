@@ -45,17 +45,17 @@ def sample_mask(idx, l):
     return np.array(mask, dtype=np.bool)
 
 def load_data(dataset_str):  # {'pubmed', 'citeseer', 'cora'}
-    """Load data."""
-    # my load data
+    """Load data_process."""
+    # my load data_process
     if dataset_str[:3] == 'my_':
         names1 = ['adj_matrix.npz', 'attr_matrix.npz']
         names2 = ['label_matrix.npy', 'train_mask.npy', 'val_mask.npy', 'test_mask.npy']
         objects = []
         for tmp_name in names1:
-            tmp_path = 'data/other/{}/{}.{}'.format(dataset_str, dataset_str, tmp_name)
+            tmp_path = 'data_process/other/{}/{}.{}'.format(dataset_str, dataset_str, tmp_name)
             objects.append(sp.load_npz(tmp_path))
         for tmp_name in names2:
-            tmp_path = 'data/other/{}/{}.{}'.format(dataset_str, dataset_str, tmp_name)
+            tmp_path = 'data_process/other/{}/{}.{}'.format(dataset_str, dataset_str, tmp_name)
             objects.append(np.load(tmp_path))
         adj, features, label_matrix, train_mask, val_mask, test_mask = tuple(objects)
 
@@ -68,28 +68,28 @@ def load_data(dataset_str):  # {'pubmed', 'citeseer', 'cora'}
 
         return adj, features, y_train, y_val, y_test, train_mask, val_mask, test_mask
     elif dataset_str == "airport":
-        adj = sp.load_npz("data/{}/{}.adj.npz".format(dataset_str, dataset_str))
+        adj = sp.load_npz("data_process/{}/{}.adj.npz".format(dataset_str, dataset_str))
         # print('=============', len(adj))
         features = sp.eye(adj.shape[0]).tolil()
-        labels = np.load("data/{}/{}.labels.npy".format(dataset_str, dataset_str))
-        idx_val = np.load("data/{}/{}.val.npy".format(dataset_str, dataset_str)).tolist()
-        idx_test = np.load("data/{}/{}.test.npy".format(dataset_str, dataset_str)).tolist()
-        idx_train = np.load("data/{}/{}.train.npy".format(dataset_str, dataset_str)).tolist()
+        labels = np.load("data_process/{}/{}.labels.npy".format(dataset_str, dataset_str))
+        idx_val = np.load("data_process/{}/{}.val.npy".format(dataset_str, dataset_str)).tolist()
+        idx_test = np.load("data_process/{}/{}.test.npy".format(dataset_str, dataset_str)).tolist()
+        idx_train = np.load("data_process/{}/{}.train.npy".format(dataset_str, dataset_str)).tolist()
         lb = LabelBinarizer()
         labels = lb.fit_transform(labels)
     else:
-        # origin load data
+        # origin load data_process
         names = ['x', 'y', 'tx', 'ty', 'allx', 'ally', 'graph']
         objects = []
         for i in range(len(names)):
-            with open("data/ind.{}.{}".format(dataset_str, names[i]), 'rb') as f:
+            with open("data_process/ind.{}.{}".format(dataset_str, names[i]), 'rb') as f:
                 if sys.version_info > (3, 0):
                     objects.append(pkl.load(f, encoding='latin1'))
                 else:
                     objects.append(pkl.load(f))
 
         x, y, tx, ty, allx, ally, graph = tuple(objects)
-        test_idx_reorder = parse_index_file("data/ind.{}.test.index".format(dataset_str))
+        test_idx_reorder = parse_index_file("data_process/ind.{}.test.index".format(dataset_str))
         test_idx_range = np.sort(test_idx_reorder)
 
         if dataset_str == 'citeseer':
@@ -180,7 +180,7 @@ def sparse_to_tuple(sparse_mx):
 
 def standardize_data(f, train_mask):
     """Standardize feature matrix and convert to tuple representation"""
-    # standardize data
+    # standardize data_process
     f = f.todense()
     mu = f[train_mask == True, :].mean(axis=0)
     sigma = f[train_mask == True, :].std(axis=0)
@@ -222,5 +222,5 @@ def preprocess_adj_bias(adj):
         adj = adj.tocoo()
     adj = adj.astype(np.float32)
     indices = np.vstack((adj.col, adj.row)).transpose()  # This is where I made a mistake, I used (adj.row, adj.col) instead
-    # return tf.SparseTensor(indices=indices, values=adj.data, dense_shape=adj.shape)
+    # return tf.SparseTensor(indices=indices, values=adj.data_process, dense_shape=adj.shape)
     return indices, adj.data, adj.shape
