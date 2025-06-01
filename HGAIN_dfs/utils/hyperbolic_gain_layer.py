@@ -1,12 +1,73 @@
 import tensorflow as tf
 import numpy as np
 from utils import util
+import networkx as nx
 
 PROJ_EPS = 1e-5
 EPS = 1e-15
 MAX_TANH_ARG = 15.0
 clip_value = 0.98
 
+
+# def centrality_guided_dfs_sampling(adj_dense, centrality_scores, dfs_steps, nb_nodes):
+#     """
+#     Perform centrality-guided DFS sampling to generate topological neighbors.
+#     """
+#     # 创建概率转移矩阵，基于中心性分数
+#     centrality_matrix = tf.expand_dims(centrality_scores, 0)  # [1, nb_nodes]
+#     centrality_matrix = tf.tile(centrality_matrix, [nb_nodes, 1])  # [nb_nodes, nb_nodes]
+#
+#     # 将邻接矩阵与中心性分数结合
+#     weighted_adj = adj_dense * centrality_matrix
+#
+#     # 执行DFS步骤
+#     current_reach = tf.eye(nb_nodes)
+#     accumulated_reach = tf.zeros_like(adj_dense)
+#
+#     for step in range(dfs_steps):
+#         # 计算下一步可达的节点
+#         next_reach = tf.matmul(current_reach, weighted_adj)
+#
+#         # 动态确定k值，避免超出实际邻居数量
+#         max_neighbors = tf.cast(tf.reduce_max(tf.reduce_sum(adj_dense, axis=1)), tf.int32)
+#         k = tf.minimum(5, max_neighbors)
+#
+#         # 对每行进行top-k采样
+#         _, top_indices = tf.nn.top_k(next_reach, k=k)
+#
+#         # 修正的采样掩码创建
+#         # 创建行索引
+#         row_indices = tf.tile(tf.expand_dims(tf.range(nb_nodes), 1), [1, k])  # [nb_nodes, k]
+#
+#         # 组合行列索引
+#         indices_2d = tf.stack([row_indices, top_indices], axis=2)  # [nb_nodes, k, 2]
+#         indices_flat = tf.reshape(indices_2d, [-1, 2])  # [nb_nodes*k, 2]
+#
+#         # 创建对应的更新值
+#         updates_flat = tf.ones([nb_nodes * k])  # [nb_nodes*k]
+#
+#         # 创建采样掩码
+#         sample_mask = tf.scatter_nd(
+#             indices=indices_flat,
+#             updates=updates_flat,
+#             shape=[nb_nodes, nb_nodes]
+#         )
+#
+#         # 更新可达矩阵
+#         next_reach = next_reach * sample_mask
+#         accumulated_reach = accumulated_reach + next_reach
+#         current_reach = tf.cast(tf.greater(next_reach, 0), tf.float32)
+#
+#     # 将累积可达矩阵二值化
+#     final_connections = tf.cast(tf.greater(accumulated_reach, 0), tf.float32)
+#
+#     # 移除自环
+#     final_connections = tf.matrix_set_diag(final_connections, tf.zeros(nb_nodes))
+#
+#     # 获取连接索引
+#     indices = tf.where(tf.greater(final_connections, 0))
+#
+#     return indices
 
 def hyperbolic_gain_attention_head(input_seq, num_heads, out_sz, adj_mat, activation, nb_nodes,
                                    tr_c=1, pre_curvature=None, in_drop=0.0, coef_drop=0.0,
@@ -158,20 +219,73 @@ def hyperbolic_gain_attention_head(input_seq, num_heads, out_sz, adj_mat, activa
                 # Convert sparse adjacency to dense for DFS computation
                 adj_dense = tf.sparse_tensor_to_dense(adj_mat)
 
-                # Create k-step reachability matrix using matrix power
-                # This simulates DFS k-step walks
-                k_step_adj = adj_dense
-                for _ in range(dfs_steps - 1):
-                    k_step_adj = tf.matmul(k_step_adj, adj_dense)
+                # # Create k-step reachability matrix using matrix power
+                # # This simulates DFS k-step walks
+                # k_step_adj = adj_dense
+                # for _ in range(dfs_steps - 1):
+                #     k_step_adj = tf.matmul(k_step_adj, adj_dense)
+                #
+                # # Binarize: any path of length k means connection
+                # k_step_adj = tf.cast(tf.greater(k_step_adj, 0), tf.float32)
+                #
+                #
+                # # Remove self-loops
+                # k_step_adj = tf.matrix_set_diag(k_step_adj, tf.zeros(nb_nodes))
 
-                # Binarize: any path of length k means connection
-                k_step_adj = tf.cast(tf.greater(k_step_adj, 0), tf.float32)
+                # 计算节点重要性（多种中心性的组合）
+                degree_centrality = tf.reduce_sum(adj_dense, axis=1)
+                betweenness_proxy = tf.linalg.diag_part(
+                    tf.matmul(tf.matmul(adj_dense, adj_dense), adj_dense)
+                )
 
-                # Remove self-loops
-                k_step_adj = tf.matrix_set_diag(k_step_adj, tf.zeros(nb_nodes))
+                # 组合重要性分数
+                importance_score = degree_centrality + 0.3 * betweenness_proxy
+
+                # 基于重要性分层
+                importance_mean = tf.reduce_mean(importance_score)
+                importance_variance = tf.reduce_mean(tf.square(importance_score - importance_mean))
+                importance_std = tf.sqrt(importance_variance + 1e-8)  # 添加小值避免数值不稳定
+
+                high_importance = tf.greater(importance_score,
+                                             importance_mean + importance_std)
+
+                # 层次化路径构建
+                current_layer = tf.eye(nb_nodes)
+                k_step_adj = tf.zeros_like(adj_dense)
+
+                for step in range(dfs_steps):
+                    if step < 2:  # 前两步：局部探索
+                        next_layer = tf.matmul(current_layer, adj_dense)
+                        # 过滤：只保留局部连接
+                        local_mask = tf.cast(tf.logical_not(high_importance), tf.float32)
+                        next_layer = next_layer * tf.expand_dims(local_mask, 0)
+                    else:  # 后续步骤：优先选择高重要性节点
+                        next_layer = tf.matmul(current_layer, adj_dense)
+                        # 增强高重要性节点的连接权重
+                        importance_boost = tf.expand_dims(importance_score, 0)
+                        next_layer = next_layer * (1.0 + importance_boost)
+
+                    k_step_adj = k_step_adj + next_layer
+                    current_layer = tf.cast(tf.greater(next_layer, 0), tf.float32)
 
                 # Get indices of k-step connections
                 k_step_indices = tf.where(tf.greater(k_step_adj, 0))
+                # adj_dense = tf.sparse_tensor_to_dense(adj_mat)
+                #
+                # # 计算度中心性作为基础（可以扩展为其他中心性度量）
+                # degree_centrality = tf.reduce_sum(adj_dense, axis=1)  # [nb_nodes]
+                #
+                # # 归一化中心性分数
+                # degree_centrality = degree_centrality / tf.reduce_max(degree_centrality)
+                #
+                # # 创建中心性导向的DFS采样
+                # # 使用自定义的DFS函数来生成拓扑邻居
+                # k_step_indices = centrality_guided_dfs_sampling(
+                #     adj_dense,
+                #     degree_centrality,
+                #     dfs_steps,
+                #     nb_nodes
+                # )
 
                 # Create learnable weight for global connections
                 global_weight = tf.get_variable(
