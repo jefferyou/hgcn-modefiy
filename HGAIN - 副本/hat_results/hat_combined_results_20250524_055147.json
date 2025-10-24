@@ -1,0 +1,59 @@
+{
+    "timestamp": "20250524_055147",
+    "parameters": {
+        "lr": 0.005,
+        "l2": 0.0001,
+        "units": 8,
+        "heads": 8,
+        "dropout": 0.6,
+        "epochs": 200,
+        "patience": 100,
+        "c": 1
+    },
+    "hat_results": {
+        "Italian Cities": {
+            "test_loss": 1.1090112924575806,
+            "test_acc": 0.5884451270103455,
+            "macro_f1": 0.24910808078206048,
+            "micro_f1": 0.5884452073358027,
+            "weighted_f1": 0.5271440836279492,
+            "val_loss": 1.2231918573379517,
+            "val_acc": 0.5470112562179565
+        },
+        "Venice": {
+            "test_loss": 1.073696494102478,
+            "test_acc": 0.6012504696846008,
+            "macro_f1": 0.12516263335935468,
+            "micro_f1": 0.60125,
+            "weighted_f1": 0.451524199843872,
+            "val_loss": 1.1280999183654785,
+            "val_acc": 0.5900002121925354
+        },
+        "Munich": {
+            "test_loss": 1.4907740354537964,
+            "test_acc": 0.5479766726493835,
+            "macro_f1": 0.1213107513095633,
+            "micro_f1": 0.547976340434854,
+            "weighted_f1": 0.39119516140406385,
+            "val_loss": 1.4835478067398071,
+            "val_acc": 0.5529879331588745
+        }
+    },
+    "baseline_results": {
+        "Italian Cities": {
+            "micro_f1": 0.125,
+            "macro_f1": 0.062,
+            "weighted_f1": 0.098
+        },
+        "Venice": {
+            "micro_f1": 0.167,
+            "macro_f1": 0.083,
+            "weighted_f1": 0.139
+        },
+        "Munich": {
+            "micro_f1": 0.111,
+            "macro_f1": 0.056,
+            "weighted_f1": 0.089
+        }
+    }
+}

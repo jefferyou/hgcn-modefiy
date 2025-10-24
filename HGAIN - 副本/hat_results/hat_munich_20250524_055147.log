@@ -1,0 +1,314 @@
+Command: python modified_hat_script.py -gpu 0 -dataset munich -data_dir graph_data -lr 0.005 -l2 0.0001 -units 8 -heads 8 -drop 0.6 -epochs 200 -patience 100 -c 1
+Start time: 2025-05-24 06:07:16.181434
+============================================================
+
+WARNING:tensorflow:From modified_hat_script.py:138: The name tf.ConfigProto is deprecated. Please use tf.compat.v1.ConfigProto instead.
+
+Loading osm_transductive with prefix munich-osm
+Loading data from: graph_data\osm_transductive
+Loading graph...
+Graph loaded with 104339 nodes and 230227 edges
+Loading features...
+Features shape: (104339, 59)
+Loading ID map...
+Loading class map...
+Single-label classification with 20 classes
+Creating masks...
+Train mask: 31303 nodes
+Validation mask: 36518 nodes
+Test mask: 36518 nodes
+Creating adjacency matrix...
+Creating labels...
+Standardizing features...
+Data loading completed successfully
+Dataset: munich
+----- Opt. hyperparams -----
+lr: 0.005
+l2_coef: 0.0001
+----- Archi. hyperparams -----
+nb. layers: 1
+nb. units per layer: [8]
+nb. attention heads: [8, 1]
+nonlinearity: <function elu at 0x00000133C65591E0>
+model: <class 'models.sp_prod_mhat.SpMHGAT'>
+WARNING:tensorflow:From modified_hat_script.py:215: The name tf.placeholder is deprecated. Please use tf.compat.v1.placeholder instead.
+
+WARNING:tensorflow:From modified_hat_script.py:217: The name tf.sparse_placeholder is deprecated. Please use tf.compat.v1.sparse_placeholder instead.
+
+input exp map zero, shape: [59, 104339]
+WARNING:tensorflow:From C:\ProgramData\anaconda3\envs\gain\lib\site-packages\tensorflow_core\python\ops\clip_ops.py:172: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+exp map, norm size [104339]
+input after exp map zero, shape: [104339, 59]
+WARNING:tensorflow:From C:\python_code\HGAIN\utils\hlayers.py:25: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From C:\python_code\HGAIN\utils\hlayers.py:31: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+WARNING:tensorflow:
+The TensorFlow contrib module will not be included in TensorFlow 2.0.
+For more information, please see:
+  * https://github.com/tensorflow/community/blob/master/rfcs/20180907-contrib-sunset.md
+  * https://github.com/tensorflow/addons
+  * https://github.com/tensorflow/io (for I/O related ops)
+If you depend on functionality not listed there, please file an issue.
+
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [59, 104339] norm shape [104339]
+exp map, norm size [104339]
+WARNING:tensorflow:From C:\python_code\HGAIN\utils\hlayers.py:50: The name tf.sparse_softmax is deprecated. Please use tf.sparse.softmax instead.
+
+WARNING:tensorflow:From C:\python_code\HGAIN\utils\hlayers.py:66: The name tf.sparse_reshape is deprecated. Please use tf.sparse.reshape instead.
+
+WARNING:tensorflow:From C:\python_code\HGAIN\utils\hlayers.py:68: The name tf.sparse_tensor_dense_matmul is deprecated. Please use tf.sparse.sparse_dense_matmul instead.
+
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+mat log map zero, shape before [8, 104339] norm shape [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+exp map, norm size [104339]
+WARNING:tensorflow:From C:\python_code\HGAIN\models\base_hgattn.py:55: softmax_cross_entropy_with_logits (from tensorflow.python.ops.nn_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+
+Future major versions of TensorFlow will allow gradients to flow
+into the labels input on backprop by default.
+
+See `tf.nn.softmax_cross_entropy_with_logits_v2`.
+
+WARNING:tensorflow:From C:\python_code\HGAIN\models\base_hgattn.py:15: The name tf.trainable_variables is deprecated. Please use tf.compat.v1.trainable_variables instead.
+
+WARNING:tensorflow:From C:\python_code\HGAIN\models\base_hgattn.py:20: The name tf.train.AdamOptimizer is deprecated. Please use tf.compat.v1.train.AdamOptimizer instead.
+
+WARNING:tensorflow:From modified_hat_script.py:241: The name tf.global_variables_initializer is deprecated. Please use tf.compat.v1.global_variables_initializer instead.
+
+WARNING:tensorflow:From modified_hat_script.py:241: The name tf.local_variables_initializer is deprecated. Please use tf.compat.v1.local_variables_initializer instead.
+
+WARNING:tensorflow:From modified_hat_script.py:248: The name tf.Session is deprecated. Please use tf.compat.v1.Session instead.
+
+2025-05-24 06:07:25.354724: I tensorflow/core/platform/cpu_feature_guard.cc:145] This TensorFlow binary is optimized with Intel(R) MKL-DNN to use the following CPU instructions in performance critical operations:  AVX AVX2
+To enable them in non-MKL-DNN operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-05-24 06:07:25.356367: I tensorflow/core/common_runtime/process_util.cc:115] Creating new thread pool with default inter op setting: 16. Tune using inter_op_parallelism_threads for best performance.
+OMP: Info #212: KMP_AFFINITY: decoding x2APIC ids.
+OMP: Info #210: KMP_AFFINITY: Affinity capable, using global cpuid leaf 11 info
+OMP: Info #154: KMP_AFFINITY: Initial OS proc set respected: 0-15
+OMP: Info #156: KMP_AFFINITY: 16 available OS procs
+OMP: Info #157: KMP_AFFINITY: Uniform topology
+OMP: Info #179: KMP_AFFINITY: 1 packages x 8 cores/pkg x 2 threads/core (8 total cores)
+OMP: Info #214: KMP_AFFINITY: OS proc to physical thread map:
+OMP: Info #171: KMP_AFFINITY: OS proc 0 maps to package 0 core 0 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 1 maps to package 0 core 0 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 2 maps to package 0 core 1 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 3 maps to package 0 core 1 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 4 maps to package 0 core 2 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 5 maps to package 0 core 2 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 6 maps to package 0 core 3 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 7 maps to package 0 core 3 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 8 maps to package 0 core 4 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 9 maps to package 0 core 4 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 10 maps to package 0 core 5 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 11 maps to package 0 core 5 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 12 maps to package 0 core 6 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 13 maps to package 0 core 6 thread 1 
+OMP: Info #171: KMP_AFFINITY: OS proc 14 maps to package 0 core 7 thread 0 
+OMP: Info #171: KMP_AFFINITY: OS proc 15 maps to package 0 core 7 thread 1 
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30404 thread 0 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30880 thread 1 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29368 thread 2 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30700 thread 5 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25988 thread 6 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 18188 thread 7 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30208 thread 3 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24308 thread 4 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26504 thread 8 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 14468 thread 9 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31120 thread 10 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 11008 thread 11 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 2388 thread 12 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31412 thread 13 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 13624 thread 14 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 4504 thread 15 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27616 thread 16 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 11416 thread 17 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 8392 thread 18 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29764 thread 32 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 23536 thread 30 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 14320 thread 20 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31460 thread 21 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30728 thread 22 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29504 thread 23 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27496 thread 24 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 13952 thread 25 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26344 thread 26 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29904 thread 27 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25908 thread 28 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30216 thread 29 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27424 thread 19 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28444 thread 31 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29088 thread 33 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31416 thread 34 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 6156 thread 35 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25052 thread 36 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27936 thread 37 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 5676 thread 41 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 16860 thread 38 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 2576 thread 39 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 22172 thread 40 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27800 thread 42 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28228 thread 43 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27060 thread 44 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29952 thread 45 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25204 thread 46 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 8076 thread 47 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 1208 thread 48 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 8148 thread 49 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 23812 thread 50 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 6864 thread 57 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31368 thread 51 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31444 thread 52 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 17008 thread 53 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24764 thread 54 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30664 thread 55 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26304 thread 56 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 8892 thread 58 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28748 thread 59 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24968 thread 60 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27120 thread 61 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24512 thread 62 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31144 thread 63 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25776 thread 64 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 3280 thread 65 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26228 thread 66 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 18556 thread 67 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29708 thread 68 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 2808 thread 69 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30000 thread 70 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30792 thread 72 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29108 thread 71 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30392 thread 73 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 18248 thread 75 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 3872 thread 76 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26984 thread 74 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 14740 thread 77 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27096 thread 78 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 3180 thread 79 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 2724 thread 80 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24960 thread 85 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28604 thread 86 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 16876 thread 81 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25640 thread 83 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 9600 thread 82 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29892 thread 87 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31680 thread 84 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 6500 thread 88 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25844 thread 89 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 24744 thread 93 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25164 thread 91 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 7192 thread 94 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25380 thread 92 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27328 thread 95 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29888 thread 90 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28736 thread 96 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30128 thread 101 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26716 thread 98 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28828 thread 97 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27740 thread 100 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25384 thread 103 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 17356 thread 99 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29408 thread 102 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 240 thread 104 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 10128 thread 108 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30060 thread 109 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29684 thread 106 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31188 thread 110 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 15272 thread 111 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 29616 thread 105 bound to OS proc set 3
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26636 thread 107 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30028 thread 112 bound to OS proc set 0
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31692 thread 118 bound to OS proc set 12
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27972 thread 113 bound to OS proc set 2
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 11212 thread 114 bound to OS proc set 4
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 13936 thread 115 bound to OS proc set 6
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 30328 thread 117 bound to OS proc set 10
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 13992 thread 119 bound to OS proc set 14
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 26564 thread 116 bound to OS proc set 8
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 11884 thread 120 bound to OS proc set 1
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28704 thread 122 bound to OS proc set 5
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 27408 thread 123 bound to OS proc set 7
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 25336 thread 124 bound to OS proc set 9
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 7964 thread 126 bound to OS proc set 13
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 13100 thread 127 bound to OS proc set 15
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 31328 thread 125 bound to OS proc set 11
+OMP: Info #250: KMP_AFFINITY: pid 25352 tid 28940 thread 121 bound to OS proc set 3
+0 Training: loss = 3.00300, acc = 0.06533 | Val: loss = 3.00926, acc = 0.10313
+10 Training: loss = 2.48585, acc = 0.29588 | Val: loss = 2.35235, acc = 0.27953
+20 Training: loss = 2.19710, acc = 0.31805 | Val: loss = 2.03450, acc = 0.33353
+30 Training: loss = 2.04535, acc = 0.35045 | Val: loss = 1.88599, acc = 0.38975
+40 Training: loss = 1.96023, acc = 0.36952 | Val: loss = 1.79803, acc = 0.42626
+50 Training: loss = 1.90817, acc = 0.38214 | Val: loss = 1.73322, acc = 0.44463
+60 Training: loss = 1.87447, acc = 0.38827 | Val: loss = 1.67838, acc = 0.47399
+70 Training: loss = 1.84589, acc = 0.39166 | Val: loss = 1.62706, acc = 0.52067
+80 Training: loss = 1.82741, acc = 0.39364 | Val: loss = 1.58314, acc = 0.54590
+90 Training: loss = 1.80895, acc = 0.39705 | Val: loss = 1.54863, acc = 0.55189
+100 Training: loss = 1.79379, acc = 0.40335 | Val: loss = 1.52375, acc = 0.55277
+110 Training: loss = 1.78410, acc = 0.40472 | Val: loss = 1.50960, acc = 0.55274
+120 Training: loss = 1.77238, acc = 0.40709 | Val: loss = 1.50010, acc = 0.55280
+130 Training: loss = 1.76341, acc = 0.40855 | Val: loss = 1.49407, acc = 0.55285
+140 Training: loss = 1.75802, acc = 0.41070 | Val: loss = 1.49359, acc = 0.55288
+150 Training: loss = 1.75278, acc = 0.41114 | Val: loss = 1.49174, acc = 0.55285
+160 Training: loss = 1.74983, acc = 0.41066 | Val: loss = 1.48850, acc = 0.55288
+170 Training: loss = 1.74533, acc = 0.41258 | Val: loss = 1.48684, acc = 0.55293
+180 Training: loss = 1.74123, acc = 0.41427 | Val: loss = 1.48532, acc = 0.55296
+190 Training: loss = 1.73829, acc = 0.41437 | Val: loss = 1.48373, acc = 0.55293
+
+Test loss: 1.4907740354537964
+Test accuracy: 0.5479766726493835
+Macro F1: 0.1213107513095633
+Micro F1: 0.547976340434854
+Weighted F1: 0.39119516140406385
+
+Results saved to: hat_results\hat_munich_20250524-063232.json
+
+============================================================
+End time: 2025-05-24 06:32:33.855802
+Duration: 1517.67 seconds
